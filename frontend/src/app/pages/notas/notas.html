@@ -67,11 +67,13 @@
           <div class="nota-footer">
             <small>Data: {{ nota.data }}</small>
             
-            <button class="btn-imprimir" 
-            (click)="imprimirNota(nota)" 
-            [disabled]="notaImprimindo === nota.numero">
-            {{ notaImprimindo === nota.numero ? 'Processando...' : 'Imprimir e Fechar' }}
-            </button>
+           @if (nota.status === 'Aberta') {
+             <button class="btn-imprimir" 
+               (click)="imprimirNota(nota)" 
+                [disabled]="notaImprimindo === nota.numero">
+               {{ notaImprimindo === nota.numero ? 'Processando...' : 'Imprimir e Fechar' }}
+               </button>
+              }
           </div>
         </div>
       } @empty {
