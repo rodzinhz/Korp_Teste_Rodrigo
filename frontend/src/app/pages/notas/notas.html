@@ -1,0 +1,82 @@
+<div class="container">
+  <h2>Emitir Nota Fiscal</h2>
+  
+  <div class="card-emissao">
+    <input type="text" [(ngModel)]="cliente" placeholder="Nome do Cliente">
+    
+    <div class="linha-selecao">
+      <select [(ngModel)]="produtoSelecionado" name="produto">
+        <option [ngValue]="null" disabled>Selecione um produto</option>
+        @for (p of listaProdutos; track p.id) {
+          <option [ngValue]="p">
+            {{ p.descricao }} - ({{ p.preco | currency:'BRL' }}) - Estoque: {{p.saldo}}
+          </option>
+        }
+      </select>
+
+      <input type="number" [(ngModel)]="quantidade" placeholder="Qtd">
+      <button class="btn-item" (click)="adicionarItem()">+ Adicionar Item</button>
+    </div>
+
+    @if (itensDaNota.length > 0) {
+      <div class="itens-temporarios">
+        <p><strong>Itens na nota:</strong></p>
+        <ul>
+          @for (it of itensDaNota; track $index) {
+            <li>{{ it.qtd }}x {{ it.descricao }} - {{ it.total | currency:'BRL' }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <button class="btn-gerar" (click)="emitirNotaFinal()" [disabled]="itensDaNota.length === 0">
+      Finalizar e Gerar Nota
+    </button>
+  </div>
+
+  <hr>
+
+  <section class="form-section">
+    <h2>Notas Emitidas</h2>
+    <div class="grid-notas">
+      @for (nota of notasEmitidas; track nota.id) {
+        <div class="nota-card">
+<button class="btn-fechar" (click)="excluirNota(nota)">×</button>          
+          <div class="nota-header">
+            <p><strong>NF-e nº:</strong> {{ nota.numero || nota.id }}</p>
+            <span class="badge-status" [class.aberta]="nota.status === 'Aberta'" [class.fechada]="nota.status === 'Fechada'">
+              {{ nota.status }}
+            </span>
+          </div>
+
+          <p><strong>Cliente:</strong> {{ nota.cliente }}</p>
+          
+          <div class="detalhes-nota">
+            <small><strong>Itens:</strong></small>
+            @for (item of nota.detalhes; track $index) {
+              <p style="font-size: 0.8rem; margin: 0;">
+                {{item.qtd}}x {{item.descricao}} - {{ item.preco_unitario| currency:'BRL' }}
+              </p>
+            }
+          </div>
+          
+         <p class="valor-total">
+          <strong>Valor Total:</strong> {{ nota.valorTotal | currency:'BRL' }}
+         </p>
+
+          <div class="nota-footer">
+            <small>Data: {{ nota.data }}</small>
+            
+            <button class="btn-imprimir" 
+            (click)="imprimirNota(nota)" 
+            [disabled]="notaImprimindo === nota.numero">
+            {{ notaImprimindo === nota.numero ? 'Processando...' : 'Imprimir e Fechar' }}
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <p>Nenhuma nota emitida.</p>
+      }
+    </div>
+  </section>
+</div>
