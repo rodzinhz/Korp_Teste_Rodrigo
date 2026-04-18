@@ -1,0 +1,131 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+nav {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 12px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+nav a.active {
+  background-color: #e91e63;
+  color: white;
+}
+:root {
+  --primary: #2563eb;    /* Azul moderno */
+  --secondary: #64748b;  /* Cinza elegante */
+  --success: #10b981;    /* Verde suave */
+  --bg: #f8fafc;         /* Fundo quase branco */
+  --card: #ffffff;
+}
+
+body {
+  background-color: var(--bg);
+  font-family: 'Inter', sans-serif; /* Use uma fonte moderna */
+  color: #1e293b;
+}
+
+.nota-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  border-left: 5px solid var(--primary); /* Barra lateral colorida */
+}
+
+.nota-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Status Badge */
+.status-aberta { background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 20px; font-size: 0.8rem; }
+.status-fechada { background: #f1f5f9; color: #475569; padding: 4px 8px; border-radius: 20px; font-size: 0.8rem; }
+/* Configuração Geral */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f7f9;
+  margin: 0;
+}
+
+.main-header {
+  text-align: center;
+  padding: 40px 20px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 30px;
+}
+
+/* Título Principal (Korp Flow) */
+.brand-title {
+  font-family: 'Poppins', sans-serif; /* Fonte mais forte para a marca */
+  font-size: 3rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0;
+  letter-spacing: -2px;
+}
+
+.brand-title span {
+  color: #2563eb; /* O azul de destaque */
+}
+
+/* Subtítulo (Gerenciamento...) */
+.sub-title {
+  font-size: 1.1rem;
+  color: #64748b;
+  font-weight: 400;
+  margin-top: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Menu de Navegação */
+.nav-menu {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.nav-link {
+  text-decoration: none;
+  padding: 12px 25px;
+  border-radius: 50px; /* Deixa os botões arredondados */
+  color: #475569;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-link i {
+  font-size: 1.1rem;
+}
+
+/* Estilo quando a aba está ativa */
+.nav-link.active {
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+.nav-link:hover:not(.active) {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}

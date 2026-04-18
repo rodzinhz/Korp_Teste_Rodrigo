@@ -1,59 +1,126 @@
-# Frontend
+### Sobre o Projeto
+Sistema web de gerenciamento de produtos e emissão de notas fiscais, desenvolvido como teste técnico para a Korp ERP. A aplicação é composta por um frontend em Angular e dois microsserviços em Go, comunicando-se via HTTP/JSON com banco de dados SQLite.
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.7.
+---
 
-## Development server
+### Tecnologias Utilizadas
 
-To start a local development server, run:
+**Frontend**
+- Angular 17+ (standalone components)
+- TypeScript
+- RxJS (HttpClient + Observable)
+- HTML + CSS
 
+**Backend**
+- Go (Golang) — linguagem principal dos microsserviços
+- `net/http` — servidor HTTP nativo do Go
+- `database/sql` + `go-sqlite3` — banco de dados
+- SQLite — persistência dos dados em arquivo
+
+**Ferramentas**
+- Git + GitHub — versionamento
+- TDM-GCC — compilador C necessário pro driver SQLite
+- Node.js + Angular CLI — ambiente do frontend
+
+---
+
+### Arquitetura
+
+```
+Frontend Angular (porta 4200)
+        ↓
+estoque-api  (porta 8081) → estoque.db
+faturamento-api (porta 8082) → faturamento.db
+        ↓
+estoque-api (desconto de saldo ao imprimir nota)
+```
+
+---
+
+### Como Rodar o Projeto
+
+**Pré-requisitos:**
+- Go instalado
+- Node.js + Angular CLI instalados
+- TDM-GCC instalado (compilador C)
+
+**1. Estoque Service**
 ```bash
+cd estoque-api
+go run main.go
+# Rodando em http://localhost:8081
+```
+
+**2. Faturamento Service**
+```bash
+cd faturamento-api
+go run main.go
+# Rodando em http://localhost:8082
+```
+
+**3. Frontend Angular**
+```bash
+cd frontend
+npm install
 ng serve
+# Acesse http://localhost:4200
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+### Funcionalidades
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+**Cadastro de Produtos**
+- Código, descrição, preço e saldo
+- Listagem e exclusão de produtos
+- Dados persistidos no banco SQLite
 
-```bash
-ng generate component component-name
-```
+**Notas Fiscais**
+- Criação de nota com múltiplos produtos
+- Status: Aberta ou Fechada
+- Numeração sequencial automática
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+**Impressão de Notas**
+- Botão de imprimir visível na tela
+- Ao imprimir: status muda para Fechada
+- Saldo dos produtos atualizado automaticamente
+- Bloqueio de impressão para notas já fechadas
+- Tratamento de falha: se o estoque-api estiver fora do ar, o usuário recebe mensagem de erro
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+### Microsserviços
 
-To build the project run:
+**estoque-api**
+- `GET /produtos` → lista produtos
+- `POST /produtos` → cadastra produto
+- `POST /produtos/descontar` → desconta saldo
+- `DELETE /produtos/:id` → exclui produto
 
-```bash
-ng build
-```
+**faturamento-api**
+- `GET /notas` → lista notas
+- `POST /notas` → cria nota
+- `PUT /notas?id=X` → imprime e fecha nota
+- `DELETE /notas?id=X` → exclui nota
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+### Detalhamento Técnico
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+**Ciclos de vida Angular utilizados:**
+- `ngOnInit` — carrega produtos e notas quando a tela abre
 
-```bash
-ng test
-```
+**RxJS:**
+- Usado via `HttpClient` — cada requisição retorna um `Observable`
+- `.subscribe()` usado para reagir às respostas assíncronas do backend
 
-## Running end-to-end tests
+**Gerenciamento de dependências Go:**
+- `go.mod` e `go.sum` — padrão nativo do Go
+- `go get` para instalar bibliotecas externas
 
-For end-to-end (e2e) testing, run:
+**Tratamento de erros no backend:**
+- Todo endpoint verifica erros e retorna códigos HTTP adequados (400, 404, 500, 503)
+- Se o estoque-api falhar durante a impressão, o faturamento-api retorna 503 e o Angular exibe mensagem ao usuário
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Frameworks Go utilizados:**
+- Apenas a biblioteca padrão (`net/http`, `database/sql`, `encoding/json`)

@@ -1,0 +1,19 @@
+<div class="container-principal">
+  <header class="main-header">
+    <h1 class="brand-title">Korp <span>Flow</span></h1>
+    <h2 class="sub-title">Gerenciamento de Produtos e Notas Fiscais</h2>
+    
+    <nav class="nav-menu">
+      <a routerLink="/produtos" routerLinkActive="active" class="nav-link">
+        <i class="fa-solid fa-box-archive"></i> Produtos
+      </a>
+      <a routerLink="/notas" routerLinkActive="active" class="nav-link">
+        <i class="fa-solid fa-file-invoice-dollar"></i> Notas Fiscais
+      </a>
+    </nav>
+  </header>
+
+  <main class="content-outlet">
+    <router-outlet></router-outlet>
+  </main>
+</div>
