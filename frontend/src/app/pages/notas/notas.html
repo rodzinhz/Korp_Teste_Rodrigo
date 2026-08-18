@@ -1,0 +1,107 @@
+<div class="container">
+
+  @if (mensagemErro) {
+    <div class="banner-erro">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>{{ mensagemErro }}</span>
+      <button class="fechar-banner" (click)="mensagemErro = null">×</button>
+    </div>
+  }
+
+  <h2><i class="fa-solid fa-file-invoice-dollar"></i> Emitir Nota Fiscal</h2>
+
+  <div class="card-emissao">
+    <input type="text" [(ngModel)]="cliente" placeholder="Nome do Cliente">
+
+    <div class="linha-selecao">
+      <select [(ngModel)]="produtoSelecionado" name="produto">
+        <option [ngValue]="null" disabled>Selecione um produto</option>
+        @for (p of listaProdutos; track p.id) {
+          <option [ngValue]="p">
+            {{ p.descricao }} — ({{ p.preco | currency:'BRL' }}) — Estoque: {{ p.saldo }}
+          </option>
+        }
+      </select>
+
+      <input type="number" [(ngModel)]="quantidade" placeholder="Qtd" min="1">
+      <button class="btn-item" (click)="adicionarItem()">
+        <i class="fa-solid fa-plus"></i> Adicionar Item
+      </button>
+    </div>
+
+    @if (itensDaNota.length > 0) {
+      <div class="itens-temporarios">
+        <p class="itens-titulo">Itens na nota</p>
+        <ul>
+          @for (it of itensDaNota; track $index) {
+            <li>
+              <span>{{ it.qtd }}x {{ it.descricao }} — {{ it.total | currency:'BRL' }}</span>
+              <button class="btn-remover-item" (click)="removerItem($index)">×</button>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+
+    <button class="btn-gerar" (click)="emitirNotaFinal()" [disabled]="itensDaNota.length === 0 || carregando">
+      @if (carregando) {
+        <i class="fa-solid fa-spinner fa-spin"></i> Enviando...
+      } @else {
+        Finalizar e Gerar Nota
+      }
+    </button>
+  </div>
+
+  <hr>
+
+  <section class="form-section">
+    <h2>Notas Emitidas</h2>
+    <div class="grid-notas">
+      @for (nota of notasEmitidas; track nota.numero) {
+        <div class="nota-card" [class.nota-fechada]="nota.status === 'Fechada'">
+          <button class="btn-fechar" (click)="excluirNota(nota)" title="Excluir nota">×</button>
+
+          <div class="nota-header">
+            <p><strong>NF-e nº:</strong> {{ nota.numero }}</p>
+            <span class="badge-status" [class.aberta]="nota.status === 'Aberta'" [class.fechada]="nota.status === 'Fechada'">
+              {{ nota.status }}
+            </span>
+          </div>
+
+          <p><strong>Cliente:</strong> {{ nota.cliente }}</p>
+
+          <div class="detalhes-nota">
+            <small><strong>Itens:</strong></small>
+            @for (item of nota.detalhes; track $index) {
+              <p class="linha-item">
+                {{ item.qtd }}x {{ item.descricao }} — {{ item.preco_unitario | currency:'BRL' }}
+              </p>
+            }
+          </div>
+
+          <p class="valor-total">
+            <strong>Valor Total:</strong> {{ nota.valorTotal | currency:'BRL' }}
+          </p>
+
+          <div class="nota-footer">
+            <small>Data: {{ nota.data }}</small>
+
+            <button class="btn-imprimir"
+              (click)="imprimirNota(nota)"
+              [disabled]="notaImprimindo === nota.numero || nota.status === 'Fechada'">
+              @if (notaImprimindo === nota.numero) {
+                <i class="fa-solid fa-spinner fa-spin"></i> Processando...
+              } @else if (nota.status === 'Fechada') {
+                <i class="fa-solid fa-check"></i> Fechada
+              } @else {
+                <i class="fa-solid fa-print"></i> Imprimir e Fechar
+              }
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <p>Nenhuma nota emitida.</p>
+      }
+    </div>
+  </section>
+</div>

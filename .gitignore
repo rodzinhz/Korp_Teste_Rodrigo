@@ -1,0 +1,12 @@
+# Go
+*.db
+
+# Node / Angular
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+node_modules/

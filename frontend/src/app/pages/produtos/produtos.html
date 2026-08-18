@@ -1,0 +1,75 @@
+<div class="produtos-container">
+
+  @if (mensagemErro) {
+    <div class="banner-erro">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>{{ mensagemErro }}</span>
+      <button class="fechar-banner" (click)="mensagemErro = null">×</button>
+    </div>
+  }
+
+  <h2><i class="fa-solid fa-box-archive"></i> Cadastro de Produtos</h2>
+
+  <section class="form-cadastro">
+    <input type="text" [(ngModel)]="codigoNovoProduto" placeholder="Código (ex: PROD-001)">
+
+    <div class="campo-com-ia">
+      <input type="text" [(ngModel)]="nomeNovoProduto" placeholder="Nome do Produto">
+      <button
+        type="button"
+        class="btn-ia"
+        title="Sugerir descrição e categoria com IA"
+        [disabled]="sugerindoIA"
+        (click)="sugerirComIA()">
+        @if (sugerindoIA) {
+          <i class="fa-solid fa-spinner fa-spin"></i>
+        } @else {
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        }
+      </button>
+    </div>
+
+    <input type="text" [(ngModel)]="categoriaNovoProduto" placeholder="Categoria (opcional)">
+    <input type="number" [(ngModel)]="precoNovoProduto" placeholder="Preço Unitário" min="0.01" step="0.01">
+    <input type="number" [(ngModel)]="saldoNovoProduto" placeholder="Quantidade em Estoque" min="1">
+    <button class="btn-adicionar" (click)="adicionar()">
+      <i class="fa-solid fa-plus"></i> Adicionar Produto
+    </button>
+  </section>
+
+  <hr>
+
+  <h2>Lista de Produtos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>Categoria</th>
+        <th>Preço</th>
+        <th>Saldo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of listaProdutos; track item.id) {
+        <tr>
+          <td>{{ item.id }}</td>
+          <td>{{ item.codigo }}</td>
+          <td>{{ item.descricao }}</td>
+          <td>{{ item.categoria || '—' }}</td>
+          <td>{{ item.preco | currency:'BRL' }}</td>
+          <td>
+            <span [class.saldo-baixo]="item.saldo <= 2">{{ item.saldo }}</span>
+          </td>
+          <td>
+            <button class="btn-delete" (click)="excluirProduto(item.id)">Excluir</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="7">Nenhum produto cadastrado.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

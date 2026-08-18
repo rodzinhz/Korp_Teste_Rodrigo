@@ -1,0 +1,54 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #64748b;
+  --success: #10b981;
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+  --bg: #f4f7f9;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --radius: 10px;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; }
+
+/* Banner de erro usado nas telas para avisar sobre falhas de serviço,
+   validação, etc. Substitui o alert() do navegador por algo visível
+   dentro do próprio layout e que o usuário pode fechar. */
+.banner-erro {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.banner-erro i { color: var(--danger); }
+
+.fechar-banner {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #991b1b;
+  font-size: 1.2rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.fa-spin {
+  animation: girar 1s linear infinite;
+}
+
+@keyframes girar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
